@@ -1,26 +1,28 @@
 extern crate sdl2;
 
-use sdl2::pixels::Color;
-use sdl2::event::Event;
-use sdl2::keyboard::Keycode;
+use sdl2::{
+    pixels::Color,
+    event::Event,
+    keyboard::Keycode
+};
 use std::time::Duration;
 
 fn main() {
-    let sdl_context = sdl2::init().unwrap();
+    let sdl_context = sdl2::init().expect("Error creating SDL context");
     let video_subsystem = sdl_context.video().unwrap();
 
     let window = video_subsystem.window("Conway's Game of Life", 400, 400).
         position_centered().
         build().
-        unwrap();
+        expect("Error creating window");
 
-    let mut canvas = window.into_canvas().build().unwrap();
+    let mut canvas = window.into_canvas().build().expect("Error creating canvas");
 
     canvas.set_draw_color(Color::RGB(233, 100, 200));
     canvas.clear();
     canvas.present();
 
-    let mut event_pump = sdl_context.event_pump().unwrap();
+    let mut event_pump = sdl_context.event_pump().expect("Error creating event pump");
     let mut i = 0;
 
     'running: loop {
@@ -33,6 +35,14 @@ fn main() {
                 Event::KeyDown { keycode: Some(Keycode::Escape), .. } => {
                     break 'running
                 },
+                Event::MouseButtonDown { mouse_btn, x, y, ..} => {
+                    match mouse_btn {
+                        sdl2::mouse::MouseButton::Left => {print!("Left,")},
+                        sdl2::mouse::MouseButton::Right => {print!("Right,")},
+                        _ => {print!("Any,")}
+                    }
+                    println!("{x}, {y}");
+                }
                 _ => {}
             }
         }
