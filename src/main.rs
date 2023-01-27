@@ -1,10 +1,12 @@
 extern crate sdl2;
 
+use imgui::Context;
 use sdl2::{
     pixels::Color,
     event::Event,
     keyboard::Keycode
 };
+use imgui_sdl2_support::SdlPlatform;
 use std::time::Duration;
 
 fn main() {
@@ -16,8 +18,20 @@ fn main() {
         build().
         expect("Error creating window");
 
-    let mut canvas = window.into_canvas().build().expect("Error creating canvas");
+    let mut imgui = Context::create();
 
+    imgui.set_ini_filename(None);
+    imgui.set_log_filename(None);
+
+    imgui
+        .fonts()
+        // .add_font(&[imgui::FontSource::DefaultFontData {config: None}])
+        .build_alpha8_texture();
+
+    let mut platform = SdlPlatform::init(&mut imgui);
+
+
+    let mut canvas = window.into_canvas().build().expect("Error creating canvas");
     canvas.set_draw_color(Color::RGB(233, 100, 200));
     canvas.clear();
     canvas.present();
@@ -46,7 +60,10 @@ fn main() {
                 _ => {}
             }
         }
-
+        platform.prepare_frame(&mut imgui, canvas.window(), &event_pump);
+        let ui = imgui.new_frame();
+        ui.show_demo_window(&mut true);
+        let _draw_data = imgui.render();
         canvas.present();
         ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / 60));
     }

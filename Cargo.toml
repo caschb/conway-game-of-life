@@ -7,4 +7,5 @@ edition = "2021"
 
 [dependencies]
 imgui = "0.10.0"
-sdl2 = "0.35.2"
+sdl2 = "0.34.5"
+imgui-sdl2-support = "0.10.0"
