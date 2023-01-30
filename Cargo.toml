@@ -6,6 +6,8 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+glow = "0.10.0"
 imgui = "0.10.0"
+imgui-glow-renderer = "0.10.0"
 sdl2 = "0.34.5"
 imgui-sdl2-support = "0.10.0"
