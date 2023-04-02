@@ -1,3 +1,4 @@
+mod Field;
 use glow::HasContext;
 use imgui::{Context};
 use sdl2::{
@@ -26,7 +27,7 @@ fn main() {
     let sdl_context = sdl2::init().expect("Error creating SDL context");
     let video_subsystem = sdl_context.video().unwrap();
     let gl_attr = video_subsystem.gl_attr();
-
+    let field = Field::Field::new(10);
     gl_attr.set_context_version(3, 3);
     gl_attr.set_context_profile(GLProfile::Core);
 
@@ -78,7 +79,13 @@ fn main() {
         }
         platform.prepare_frame(&mut imgui_context, &window, &event_pump);
         let ui = imgui_context.new_frame();
-        ui.show_demo_window(&mut true);
+        let result = ui.button("Hello");
+        if result
+        {
+            println!("Yay");
+        }
+        
+        //ui.show_demo_window(&mut true);
         let draw_data = imgui_context.render();
         unsafe { renderer.gl_context().clear(glow::COLOR_BUFFER_BIT) };
         renderer.render(draw_data).expect("Renderer error");
